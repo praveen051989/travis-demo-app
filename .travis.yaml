@@ -1,27 +1,35 @@
 language: java
-os: osx
 jdk:
   - openjdk8
-before_install:
-  - brew install git-lfs
+  
+env:
+  - NODE_VERSION=12
 
-before_script:
-  - git lfs pull
-
-# safelist
-branches:
-  only:
-  - master
-  - dev
 cache:
   directories:
-   - "$HOME/.cache"
+    - "$HOME/.cache"
+
 jobs:
-  - stage: deploy
-  name: 'Deploy To Dev Environment'
-  script:
-    - mvn clean install
-    - cp .travis.settings.xml $HOME/.m2/settings.xml
-    - mvn deploy -DmuleDeploy -Dserver=$server -Dworkers=$workers -DworkerType=$workerType -Denvironment=$environment -DmuleVersion=$muleVersion -DappName=$appName
-    
-#if: branch = dev
+  include:
+    - stage: deploy
+      name: 'Deploy To CloudHub Development Environment'
+      script:
+        - cp .travis.settings.xml $HOME/.m2/settings.xml
+        - mvn clean install deploy -DmuleDeploy -Dserver=$server -Denvironment=$environment -Dworkers=$workers -DworkerType=$workerType -DmuleVersion=$muleVersion -DappName=$appName
+      on:
+        branch: dev
+        
+    - stage: test
+      name: 'Peform Newman Test'
+      install:
+        - nvm install $NODE_VERSION
+        - npm install newman
+      before_script:
+        - nvm use $NODE_VERSION
+        - npm --version
+        - node --version
+        - node_modules/.bin/newman --version
+      script:
+        - node_modules/.bin/newman run travis-test-app-coll.postman_collection.json --disable-unicode
+      on:
+        branch: dev
