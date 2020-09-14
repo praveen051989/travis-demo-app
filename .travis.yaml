@@ -1,8 +1,18 @@
 language: java
-os:
-  - osx
+os: osx
 jdk:
   - openjdk8
+before_install:
+  - brew install git-lfs
+
+before_script:
+  - git lfs pull
+
+# safelist
+branches:
+  only:
+  - master
+  - stable
 cache:
   directories:
    - "$HOME/.cache"
