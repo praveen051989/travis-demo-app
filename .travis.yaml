@@ -1,0 +1,27 @@
+language: java
+os: osx
+jdk:
+  - openjdk8
+before_install:
+  - brew install git-lfs
+
+before_script:
+  - git lfs pull
+
+# safelist
+branches:
+  only:
+  - master
+  - dev
+cache:
+  directories:
+   - "$HOME/.cache"
+jobs:
+  - stage: deploy
+  name: 'Deploy To Dev Environment'
+  script:
+    - mvn clean install
+    - cp .travis.settings.xml $HOME/.m2/settings.xml
+    - mvn deploy -DmuleDeploy -Dserver=$server -Dworkers=$workers -DworkerType=$workerType -Denvironment=$environment -DmuleVersion=$muleVersion -DappName=$appName
+    
+#if: branch = dev
