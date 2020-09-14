@@ -12,7 +12,7 @@ before_script:
 branches:
   only:
   - master
-  - stable
+  - dev
 cache:
   directories:
    - "$HOME/.cache"
