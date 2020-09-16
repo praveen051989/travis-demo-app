@@ -19,3 +19,17 @@ jobs:
         on:
             branch: dev
         
+    - stage: test
+    name: 'Peform Newman Test'
+    install:
+        - nvm install $NODE_VERSION
+        - npm install newman
+    before_script:
+        - nvm use $NODE_VERSION
+        - npm --version
+        - node --version
+        - node_modules/.bin/newman --version
+    script:
+        - node_modules/.bin/newman run travis-test-app-coll.postman_collection.json --disable-unicode
+    on:
+        branch: dev
