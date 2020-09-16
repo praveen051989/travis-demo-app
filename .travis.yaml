@@ -16,6 +16,5 @@ jobs:
         script:
         - cp .travis.settings.xml $HOME/.m2/settings.xml
         - mvn clean install deploy -DmuleDeploy -Dserver=$server -Denvironment=$environment -Dworkers=$workers -DworkerType=$workerType -DmuleVersion=$muleVersion -DappName=$appName
-        on:
-            branch: dev
+        
         
