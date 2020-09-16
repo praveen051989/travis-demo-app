@@ -2,4 +2,4 @@ language: java
 jdk:
  - openjdk8
    
-script: /Users/akhil/Softwares/maven-3.6.0/bin/mvnw clean install
+script: /Users/akhil/Softwares/maven-3.6.0/bin/mvn clean install
